@@ -37,4 +37,4 @@ The project uses **built-in R datasets** (`EuStockMarkets`, `attitude`) and R pa
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YourUsername/time-series-analysis-dashboard-r.git
+git clone https://github.com/Malombe-Caleb/time-series-analysis-dashboard-r.git
