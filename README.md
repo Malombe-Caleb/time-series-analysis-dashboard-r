@@ -25,9 +25,9 @@ The project uses **built-in R datasets** (`EuStockMarkets`, `attitude`) and R pa
 
 ### Folders
 
-- `data/` – Reserved for any external datasets you may add in future. Currently empty.
-- `src/` – Could be used for R scripts, but in this project scripts are in the root for simplicity.
-- `docs/` – Could hold any reports, images, or documentation. Currently empty.
+- `dashboard/` – Reserved for any interactive dashboards created using the datasets and different values. Currently empty
+- `outputs/` – Could be used for results obtained after running the programmes on any dataset. Currently empty
+- `scripts/` – Could hold any reports, images, or documentation. Currently empty.
 
 > Folders are placeholders for future expansion, ensuring scalability and organization.
 
