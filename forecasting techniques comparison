@@ -1,0 +1,78 @@
+Comparison of Forecasting Techniques – Stationary vs Non-Stationary Methods (With DAX Examples)
+
+1. Introduction
+   Forecasting requires understanding whether a dataset is stationary (constant mean/variance) or non-stationary (trends or seasonality present). In this project, we use the DAX index from EuStockMarkets as a real-world example of a financial time series.
+
+2. Stationarity Assessment
+
+* Plotting the DAX series revealed a clear upward trend.
+* Applying 5-day and 20-day moving averages smoothed short-term fluctuations but confirmed the overall trend.
+* Augmented Dickey-Fuller (ADF) test can formally check stationarity:
+
+```r
+library(tseries)
+adf.test(dax_ts)
+```
+
+* Example result: p-value > 0.05 → non-stationary (trend present).
+* Therefore, the DAX series is mostly non-stationary, requiring differencing (for ARIMA) or a non-stationary method like ETS.
+
+3. Stationary Methods Example
+
+* ARIMA: Using auto.arima() on differenced DAX series:
+
+```r
+library(forecast)
+fit_arima <- auto.arima(dax_ts)
+forecast_10 <- forecast(fit_arima, h = 10)
+plot(forecast_10)
+```
+
+* Observations: Captures short-term fluctuations; forecast intervals widen with time.
+* SMA (5-day/20-day): Useful for trend visualization but cannot forecast future values reliably.
+
+4. Non-Stationary Methods Example
+
+* ETS (Exponential Smoothing):
+
+```r
+fit_ets <- ets(dax_ts)
+forecast_ets <- forecast(fit_ets, h = 10)
+plot(forecast_ets)
+```
+
+* Observations: Captures the upward trend smoothly; short-term forecasts follow trend better than ARIMA on non-differenced data.
+
+* STL Decomposition + Forecasting:
+
+```r
+dax_ts_weekly <- ts(dax_ts, frequency = 5)
+fit_stl <- stlf(dax_ts_weekly, h = 10)
+plot(fit_stl)
+```
+
+* Observations: Separates trend and residual fluctuations; forecast follows trend while accounting for short-term irregularities.
+
+5. Key Comparisons (with DAX Examples)
+   | Feature | ARIMA | ETS | SMA | STL Forecast |
+   |---------|-------|-----|-----|--------------|
+   | Stationarity Requirement | Yes (differencing required) | No | Yes | No |
+   | Handles Seasonality | SARIMA only | Yes (trend + seasonality) | No | Yes |
+   | Trend Capture | Differencing | Explicit trend | No | Trend component |
+   | Forecast Horizon | Short-term | Short-term | Visualization only | Short-term |
+   | Confidence Intervals | Wider with more steps | Smoother, narrower | N/A | Moderate |
+   | DAX Example | Captured short-term fluctuations | Followed trend smoothly | Visualized trends | Separated trend and residuals |
+
+6. Summary / Interpretation
+
+* DAX is non-stationary, showing an upward trend.
+* SMA is useful for visualizing trends but cannot forecast.
+* ARIMA works after differencing; captures short-term fluctuations but may produce wide confidence intervals.
+* ETS and STL handle non-stationary trends naturally, providing smoother forecasts.
+* Practical takeaway: For financial indices with trends, ETS or STL is generally preferable; ARIMA is better if the series can be made stationary.
+
+7. Recommendation
+
+* Plot the series and assess stationarity.
+* Use SMA for smoothing, ARIMA for stationary modeling, and ETS/STL for non-stationary forecasting.
+* Evaluate forecast accuracy using RMSE, MAE, or MAPE.
